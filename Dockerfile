@@ -1,9 +1,9 @@
 # Build stage
 FROM maven:3.8.5-openjdk-17 AS build
-WORKDIR /usr/app
-COPY ./src /usr/app/src
-COPY ./pom.xml /usr/app
-RUN mvn clean install -f /usr/app/pom.xml -DskipTests
+
+COPY ./src /home/app/src
+COPY ./pom.xml /home/app
+RUN mvn clean install -f /home/app/pom.xml -DskipTests
 
 #
 # Package stage
@@ -11,6 +11,6 @@ RUN mvn clean install -f /usr/app/pom.xml -DskipTests
 #FROM openjdk:8-jdk-alpine
 FROM openjdk:17-slim
 WORKDIR /usr/src
-COPY --from=build /usr/app/target/app.jar /usr/local/lib/app.jar
+COPY --from=build /home/app/target/quarkus-app /usr/local/lib/quarkus-app
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
+ENTRYPOINT ["java","-Dquarkus.profile=prod", "-jar","/usr/local/lib/quarkus-app/quarkus-run.jar"]
