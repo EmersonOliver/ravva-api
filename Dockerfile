@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3.8.5-openjdk-17-slim AS build
+FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /usr/app
 COPY ./src /usr/app/src
 COPY ./pom.xml /usr/app
